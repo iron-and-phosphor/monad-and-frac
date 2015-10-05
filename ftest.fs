@@ -87,6 +87,8 @@ let test = lb{
 
 [<EntryPoint>]
 let main args =
+  
   printfn "%A" test
+  //printfn "%A" bla
   do Application.Run(app)
   0
