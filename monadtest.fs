@@ -13,23 +13,30 @@ type StateBuilder() =
   member this.Bind (o:State<'a,'s>, f:'a -> State<'b,'s>) :State<'b,'s> =
    fun s ->
      let (a,s') = o s
-     let (b,s'') = f a s'
-     (b,s'')
+     f a s'
   member this.Return x = fun (s:'s) -> x,s
   member this.ReturnFrom x = x
 
 let st = StateBuilder()
 
-let s0 = fun s -> (1),(0)
+let runstate (s:State<'a,'s>) (initstate:'s) = s initstate
+let getstate = fun s -> s,s
 
-let f1 = fun f -> (fun s -> ((f*2),(s+1)))
+let s0 = (fun s -> 1,s)
+let bla = fun s -> s,s
+
+let f1 = fun f -> (fun s -> ((f+5),(s+1)))
 
 let test = st{
-  let t1 = s0 f1
+  let! t1 = s0 f1
   return! t1
 
 }
 
+[<EntryPoint>]
+let main args =
+  //printfn "%A" ((test))
+  0
 
 (*
 type ResultBuilder()=
